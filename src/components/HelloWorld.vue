@@ -1,58 +1,94 @@
-<template>
-  <div class="hello">
-    <h1>{{ msg }}</h1>
-    <p>
-      For a guide and recipes on how to configure / customize this project,<br>
-      check out the
-      <a href="https://cli.vuejs.org" target="_blank" rel="noopener">vue-cli documentation</a>.
-    </p>
-    <h3>Installed CLI Plugins</h3>
-    <ul>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-babel" target="_blank" rel="noopener">babel</a></li>
-      <li><a href="https://github.com/vuejs/vue-cli/tree/dev/packages/%40vue/cli-plugin-eslint" target="_blank" rel="noopener">eslint</a></li>
-    </ul>
-    <h3>Essential Links</h3>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank" rel="noopener">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank" rel="noopener">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank" rel="noopener">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank" rel="noopener">Twitter</a></li>
-      <li><a href="https://news.vuejs.org" target="_blank" rel="noopener">News</a></li>
-    </ul>
-    <h3>Ecosystem</h3>
-    <ul>
-      <li><a href="https://router.vuejs.org" target="_blank" rel="noopener">vue-router</a></li>
-      <li><a href="https://vuex.vuejs.org" target="_blank" rel="noopener">vuex</a></li>
-      <li><a href="https://github.com/vuejs/vue-devtools#vue-devtools" target="_blank" rel="noopener">vue-devtools</a></li>
-      <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
-    </ul>
-  </div>
-</template>
+<script setuo>
+// that would be composition api
+//import { ref } from 'vue'
 
-<script>
+//const test = ref('Hiha')
+
+// but here we use options api!
+import EditField from './EditField.vue'
+import ListField from './ListField.vue'
+import MyLoop from './MyLoop.vue'
+import UpdateParentComponent from './UpdateParentComponent.vue'
+import SlottedButton from './SlottedButton.vue'
+import MegaSlot from './MegaSlot.vue'
+import RedSpan from './RedSpan.vue'
+import MouseTracker from './MouseTracker.vue'
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+data() {
+return { test: 'Hiha',
+showSubcomponent: true,
+changedByChild: ""
+}
+},
+props: ['msg'],
+       components: {
+       EditField,
+       ListField,
+       MyLoop,
+       UpdateParentComponent,
+       SlottedButton,
+       MegaSlot,
+       RedSpan,
+       MouseTracker
+       },
+methods: {
+ removeComp() {
+ this.showSubcomponent = false;
+ },
+ change(newTitle) {
+this.changedByChild = newTitle
+ //console.log('Changed')
+ if(this.changedByChild == '') return
+ if(this.changedByChild.charAt(0) == 'L') {
+ this.changedByChild = this.changedByChild.toUpperCase();
+ } else {
+ this.changedByChild = this.changedByChild.toLowerCase();
+ }
+ }
+ }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-h3 {
-  margin: 40px 0 0;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
-</style>
+
+<template>
+<h1>Here is my child component!</h1>
+Test
+<MyButton /><br>
+{{ msg }}
+<MyButton /><br>
+{{ test }}
+<MyButton /><br>
+<EditField />
+<ListField />
+<div v-if="showSubcomponent">
+<MyLoop :length="25" @killComponent="removeComp" />
+{{ changedByChild }}<br>
+<UpdateParentComponent @update:title="change" :title="changedByChild" /><br>
+{{ changedByChild }}<br>
+<SlottedButton>Slotted Button</SlottedButton>
+<SlottedButton></SlottedButton>
+Note: You can use slotted components in other slots:
+<SlottedButton>Voll <RedSpan>mega!</RedSpan></SlottedButton>
+Slotted components have no access to the child component's data!
+<MegaSlot>
+ <template v-slot:header="slotProps">
+  My personal header.
+ <p> {{ slotProps.someText }} </p>
+  <p>{{ slotProps.passedCount }} </p>
+ </template>
+ <template #main> <!-- shorthand for v-slot -->
+  The main content.
+ </template>
+ <template v-slot:footer>
+  A general footer.
+ </template>
+</MegaSlot>
+<p>
+<MouseTracker v-slot="{ x, y }">
+Mouse is at: {{ x }}, {{ y }}
+</MouseTracker>
+by a <em>renderless component</em>
+</p>
+</div>
+</template>
