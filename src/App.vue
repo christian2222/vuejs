@@ -25,6 +25,9 @@ name: 'Michael',
       msg: 'Huch'
       }
      },
+     provide: {
+      myColor: 'blue'
+     },
       setup(props) {
       console.log(props.msg)
       }

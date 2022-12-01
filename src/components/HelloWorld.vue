@@ -1,18 +1,19 @@
-<script setuo>
+<script>
 // that would be composition api
 //import { ref } from 'vue'
 
 //const test = ref('Hiha')
 
 // but here we use options api!
-import EditField from './EditField.vue'
-import ListField from './ListField.vue'
-import MyLoop from './MyLoop.vue'
-import UpdateParentComponent from './UpdateParentComponent.vue'
-import SlottedButton from './SlottedButton.vue'
-import MegaSlot from './MegaSlot.vue'
-import RedSpan from './RedSpan.vue'
-import MouseTracker from './MouseTracker.vue'
+import EditField from './options/EditField.vue'
+import ListField from './options/ListField.vue'
+import MyLoop from './options/MyLoop.vue'
+import UpdateParentComponent from './options/UpdateParentComponent.vue'
+import SlottedButton from './options/SlottedButton.vue'
+import MegaSlot from './options/MegaSlot.vue'
+import ColorSpan from './options/ColorSpan.vue'
+import MouseTracker from './options/MouseTracker.vue'
+import BlogPost from './composition/BlogPost.vue'
 
 export default {
 data() {
@@ -29,8 +30,9 @@ props: ['msg'],
        UpdateParentComponent,
        SlottedButton,
        MegaSlot,
-       RedSpan,
-       MouseTracker
+       ColorSpan,
+       MouseTracker,
+       BlogPost
        },
 methods: {
  removeComp() {
@@ -69,7 +71,7 @@ Test
 <SlottedButton>Slotted Button</SlottedButton>
 <SlottedButton></SlottedButton>
 Note: You can use slotted components in other slots:
-<SlottedButton>Voll <RedSpan>mega!</RedSpan></SlottedButton>
+<SlottedButton>Voll <ColorSpan>mega!</ColorSpan></SlottedButton>
 Slotted components have no access to the child component's data!
 <MegaSlot>
  <template v-slot:header="slotProps">
@@ -91,4 +93,5 @@ Mouse is at: {{ x }}, {{ y }}
 by a <em>renderless component</em>
 </p>
 </div>
+<BlogPost heading="My post list" :likes="4"/>
 </template>
